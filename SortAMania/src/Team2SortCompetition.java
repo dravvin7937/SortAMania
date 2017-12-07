@@ -4,24 +4,28 @@ public class Team2SortCompetition extends SortCompetition {
 
 	public static void main(String[] args)
 	{	
-//		//checks challengeOne
-//		int[] arr1 = createArray(10000);
-//		double median = challengeOne(arr1);
-//		System.out.println("median: " + median);
-//		
-//		//checks challengeTwo
-//			//stack overflow error
-//		String[] arr2 = {"hey", "hi", "bye"};
-//		int index = challengeTwo(arr2, "bye");
-//		System.out.println("index of string: " + index);
+		//checks challengeOne
+		int[] arr1 = createArray(10000);
+		challengeOne(arr1);
+		
+		//checks challengeTwo
+		String[] arr2 = {"hey", "hi", "bye"};
+		challengeTwo(arr2, "bye");
+		
+		//checks challengeThree
+		challengeThree(arr1);
+		
+		//checks challengeFour
+		int[][] arr3 = create2DArray(1000);
+		challengeFour(arr3);
 	}
 
 	public String greeting() 
 	{
-		return "This is Team 2, created by Katherin & Dana";
+		return "This is Team 2, created by Katherin & Dana.";
 	}
 	
-	//this function sorts the array and returns the median
+	//this method sorts the array and returns the median
 	public int challengeOne(int[] arr)
 	{
 		printIntArray(arr);
@@ -30,7 +34,7 @@ public class Team2SortCompetition extends SortCompetition {
 		return findMedian(arr);
 	}
 	
-	//this function sorts the list and if it finds the string, return the index of the string 
+	//this method sorts the list and if it finds the string, return the index of the string 
 	public int challengeTwo(String[] arr, String query)
 	{
 		printStringArray(arr);
@@ -47,13 +51,13 @@ public class Team2SortCompetition extends SortCompetition {
 		return -1;
 	}
 	
-	//this function sorts a mostly sorted list and returns the median 
+	//this method sorts a mostly sorted list and returns the median 
 	public int challengeThree(int[] arr)
 	{
 		return challengeOne(arr);
 	}
 	
-	//this function sorts the sub arrays first, then the arrays by the median value, returns index of the median
+	//this method sorts the sub arrays first, then the arrays by the median value, returns index of the median
 	public int challengeFour(int[][] arr)
 	{
 		int[] arr2 = new int[arr.length];
@@ -68,13 +72,21 @@ public class Team2SortCompetition extends SortCompetition {
 		return findMedian(arr2);
 	}
 	
-	//this function sort an array of any objects and sees if it contains the element given. returns position or -1
+	//this method sort an array of any objects and sees if it contains the element given. returns position or -1
 	public int challengeFive(Comparable[]arr, Comparable query)
 	{
+		mergeSort(arr);
+		for (int i = 0; i<arr.length; i++)
+		{
+			if (arr[i].equals(query))
+			{
+				return i;
+			}
+		}
 		return -1;
 	}
 	
-	//this function finds the median of the array
+	//this method finds the median of the array
 	public static int findMedian(int[] arr)
 	{
 		int middle = 0;
@@ -101,9 +113,25 @@ public class Team2SortCompetition extends SortCompetition {
 		return arr;
 	}
 	
+	public static int[][] create2DArray(int n)
+	{
+		Random rnd = new Random();
+		int[][] arr = new int[n][n];
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				arr[i][j] = rnd.nextInt(10000);
+			}
+		}
+		return arr;
+	}
+	
 	//creates a random 5 character string
 	public static String createRandomString()
 	{
+		String charsList = "abcdefghijklmnopqrstuvwxyz";
+		Random rnd2 = new Random();
 		return "hello";
 	}
 	
@@ -127,7 +155,7 @@ public class Team2SortCompetition extends SortCompetition {
 		System.out.println();
 	}
 	
-	//working int partition
+	//int partition
 	public static int partition(int[] list1, int front, int back)
 	{
 		//returns position of the pivot 
@@ -148,7 +176,7 @@ public class Team2SortCompetition extends SortCompetition {
 		return pivPosition;
 	}
 	
-	//working int quickSort
+	//int quickSort
 	public static void quickSort(int[] list1, int front, int back)
 	{
 		if (front < back)
@@ -167,6 +195,14 @@ public class Team2SortCompetition extends SortCompetition {
 		arr[j] = temp;
 	}
 	
+	//string swap
+	public static void swapS(String[] arr, int i, int j)
+	{
+		String temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+	
 	//string sort
 	public static void bubbleSort(String[] list1)
 	{
@@ -180,12 +216,81 @@ public class Team2SortCompetition extends SortCompetition {
 		}
 	}
 	
-	//string swap
-	public static void swapS(String[] arr, int i, int j)
+	public static String[] merge(String[] list1, String[] list2)
 	{
-		String temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
+		String[] mergedList = new String[list1.length+list2.length];
+		
+		int listIndex = 0;
+		int i = 0;
+		int x = 0;
+		
+		String check1 = list1[i];
+		String check2 = list2[x];
+		
+		while(i < list1.length && x < list2.length-1)
+		{
+			//System.out.println("i: " + i + " x: " + x + " listIndex: " + listIndex + " check1: " + check1 + " check2: " + check2);
+			
+			if (check1.compareTo(check2) <= 0)
+			{
+				//check1 is closer to a than check2
+				mergedList[listIndex] = check1;
+				listIndex++;
+				i++;
+				check1 = list1[i];
+			}
+			else
+			{
+				//check2 is closer to a than check1
+				mergedList[listIndex] = check2;
+				listIndex++;
+				x++;
+				check2 = list2[x];
+			}
+		}
+		
+		while (i < list1.length)
+		{
+			mergedList[listIndex] = list1[i];
+			i++;
+			listIndex++;
+		}
+		
+		while (x < list2.length)
+		{
+			mergedList[listIndex] = list2[x];
+			x++;
+			listIndex++;
+		}
+		
+		return mergedList;
 	}
 	
+	public static String[] mergeSort(Comparable[] arr)
+	{
+		//initializes the two halves
+		String[] list1 = new String[arr.length/2];
+		String[] list2 = new String[arr.length/2];
+		
+		//sets the values into the new arrays
+		for (int i = 0; i < arr.length/2; i++)
+		{
+			list1[i] = (String) arr[i];
+		}
+		for (int i = arr.length/2; i < arr.length; i++)
+		{
+			list2[i] = (String) arr[i];
+		}
+		
+		//completes the recursive separation
+		while (list1.length > 1 || list2.length > 1)
+		{
+			mergeSort(list1);
+			mergeSort(list2);
+		}
+		
+		
+		return merge(list1, list2);		
+		
+	}
 }
