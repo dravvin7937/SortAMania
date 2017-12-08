@@ -17,11 +17,11 @@ public class challenges {
 		System.out.println("median: " + median);
 
 		//checks challengeTwo
-			//stack overflow error
 		String[] arr2 = {"hey", "hi", "bye"};
 		int index = challengeTwo(arr2, "bye");
 		System.out.println("index of string: " + index);
 
+		//checks challengeFour
 	}
 
 	
@@ -130,15 +130,6 @@ public class challenges {
 			arr[i] = rnd.nextInt(10000);
 		}
 		return arr;
-	}
-
-	/**
-	* creates a random 5 character string
-	*/
-	
-	public static String createRandomString()
-	{
-		return "hello";
 	}
 
 	/** 
