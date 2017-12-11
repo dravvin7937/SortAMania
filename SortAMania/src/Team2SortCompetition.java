@@ -52,7 +52,7 @@ public class Team2SortCompetition extends SortCompetition{
 	public int challengeOne(int[] arr)
 	{
 		//printIntArray(arr);
-		quickSort(arr, 0, arr.length-1);
+		quickSort(arr, 0, arr.length);
 		//printIntArray(arr);
 		return (int) findMedian(arr);
 	}
@@ -66,12 +66,17 @@ public class Team2SortCompetition extends SortCompetition{
 	public int challengeTwo(String[] arr, String query)
 	{
 		//printStringArray(arr);
-		mergeSort(arr);
-		//printStringArray(arr);
+		//mergeSort(arr);
+		String[] sorted = mergeSort(arr);
+		for (int i = 0; i < sorted.length; i++)
+		{
+			arr[i] = sorted[i];
+		}
+			//printStringArray(arr);
 
 		for (int i = 0; i < arr.length; i++)
 		{
-			if (arr[i].equals(query))
+			if (query.equals(arr[i]))
 			{
 				return i;
 			}
@@ -118,10 +123,14 @@ public class Team2SortCompetition extends SortCompetition{
 
 	public int challengeFive(Comparable[]arr, Comparable query)
 	{
-		mergeSort2(arr);
+		Comparable[] sorted = mergeSortC(arr);
+		for(int i = 0; i < sorted.length; i++)
+		{
+			arr[i] = sorted[i];
+		}
 		 for (int i = 0; i<arr.length; i++)
 		 {
-			 if (arr[i].equals(query))
+			 if (query.equals(arr[i]))
 		 	 {
 			 	return i;
 		 	 }
@@ -130,16 +139,16 @@ public class Team2SortCompetition extends SortCompetition{
 	}
 
 	//this function finds the median of the array
-	public static double findMedian(int[] arr)
+	public double findMedian(int[] arr)
 	{
-		int middle = 0;
+		double middle = 0;
 		if (arr.length%2 == 0)
 		{
-			middle = (arr[arr.length/2] + arr[(arr.length/2) - 1])/2;
+			middle = (double)((arr[arr.length/2] + arr[(arr.length/2) - 1])/2);
 		}
 		else
 		{
-			middle = arr[arr.length/2-1];
+			middle = (double)(arr[(arr.length-1)/2]);
 		}
 		return middle;
 	}
@@ -210,24 +219,28 @@ public class Team2SortCompetition extends SortCompetition{
 	
 	*/
 	
-	public static int partition(int[] list1, int front, int back)
+	public int partition(int[] list1, int front, int back)
 	{
 		//returns position of the pivot
 		int pivot = list1[front];
 		int pivPosition = front;
+		int low = front;
 
 		for (int i = front+1; i < back; i++)
 		{
 			if (list1[i]<=pivot)
 			{
-				for (int j = 0; j<i-pivPosition; j++)
+				if (pivPosition == low)
 				{
-					swap(list1,i-j,i-j-1);
+					pivPosition = i;
 				}
-				pivPosition++;
+				swap(list1, low, i);
+				
+				low++;
 			}
 		}
-		return pivPosition;
+		swap(list1,pivPosition, low);
+		return low+1;
 	}
 
 	
@@ -237,12 +250,16 @@ public class Team2SortCompetition extends SortCompetition{
 	* @param front- to be compared with
 	* @param back - for use of comparison 
 	*/
-	public static void quickSort(int[] list1, int front, int back)
+	public void quickSort(int[] list1, int front, int back)
 	{
-		if (front < back)
+		if (back - front <= 1)
 		{
-			int pivPosition = partition(list1, front, back);
-			quickSort(list1,front,pivPosition-1);
+			return;
+		}
+		else
+		{
+			int pivPosition = partition(list1, front, back) - 1;
+			quickSort(list1,front,pivPosition);
 			quickSort(list1,pivPosition+1,back);
 		}
 	}
@@ -286,7 +303,7 @@ public class Team2SortCompetition extends SortCompetition{
 		arr[j] = temp;
 	}
 	
-	public static String[] merge(String[] list1, String[] list2)
+	public String[] merge(String[] list1, String[] list2)
  	{
  		String[] mergedList = new String[list1.length+list2.length];
  		
@@ -297,43 +314,41 @@ public class Team2SortCompetition extends SortCompetition{
 // 		String check1 = list1[i];
 // 		String check2 = list2[x];
  		
-		while(i < list1.length && x < list2.length)
+		while(i < list1.length || x < list2.length)
  		{
  			//System.out.println("i: " + i + " x: " + x + " listIndex: " + listIndex + " check1: " + check1 + " check2: " + check2);
- 			
- 			if (list1[i].compareTo(list2[x]) <= 0)
+	 		
+	 		if (i == list1.length)
+	 		{
+	 			mergedList[listIndex] = list2[x];
+	 			x++;
+	 			listIndex++;
+	 		}
+	 		else if(x == list2.length)
+	 		{
+	 			mergedList[listIndex] = list1[i];
+	 			i++;
+	 			listIndex++;
+	 		}
+	 		else if (list1[i].compareTo(list2[x]) < 0)
  			{
  				//check1 is closer to a than check2
  				mergedList[listIndex] = list1[i];
- 				listIndex++;
  				i++;
+ 				listIndex++;
  			}
  			else
  			{
  				//check2 is closer to a than check1
  				mergedList[listIndex] = list2[x];
- 				listIndex++;
  				x++;
+ 				listIndex++;
  			}
- 		}
- 		
- 		while (i < list1.length)
- 		{
- 			mergedList[listIndex] = list1[i];
- 			i++;
- 			listIndex++;
- 		}
- 		
- 		while (x < list2.length)
- 		{
- 			mergedList[listIndex] = list2[x];
- 			x++;
- 			listIndex++;
  		}
  	 	return mergedList;
  	}
 	
-	public static String[] mergeSort(String[] arr)
+	public String[] mergeSort(String[] arr)
  	{
  		//initializes the two halves
 // 		String[] list1 = new String[arr.length/2];
@@ -365,55 +380,100 @@ public class Team2SortCompetition extends SortCompetition{
 		}	
  	}
 	
-	public static Comparable[] merge2(Comparable[] list1, Comparable[] list2)
+//	public static Comparable[] merge2(Comparable[] list1, Comparable[] list2)
+// 	{
+//		Comparable[] mergedList = new Comparable[list1.length+list2.length];
+// 		
+// 		int listIndex = 0;
+// 		int i = 0;
+// 		int x = 0;
+// 		
+//// 		Comparable check1 = list1[i];
+//// 		Comparable check2 = list2[x];
+// 		
+// 		while(i < list1.length && x < list2.length)
+// 		{
+// 			//System.out.println("i: " + i + " x: " + x + " listIndex: " + listIndex + " check1: " + check1 + " check2: " + check2);
+// 			
+// 			if (list1[i].compareTo(list2[x]) <= 0)
+// 			{
+// 				//check1 is closer to a than check2
+// 				mergedList[listIndex] = list1[i];
+// 				listIndex++;
+// 				i++;
+// 			}
+// 			else
+// 			{
+// 				//check2 is closer to a than check1
+// 				mergedList[listIndex] = list2[x];
+// 				listIndex++;
+// 				x++;
+// 			}
+// 		}
+// 		
+// 		while (i < list1.length)
+// 		{
+// 			mergedList[listIndex] = list1[i];
+// 			i++;
+// 			listIndex++;
+// 		}
+// 		
+// 		while (x < list2.length)
+// 		{
+// 			mergedList[listIndex] = list2[x];
+// 			x++;
+// 			listIndex++;
+// 		}
+// 		
+// 		return mergedList;
+// 	}
+	
+	public static Comparable[] mergeC(Comparable[] list1, Comparable[] list2)
  	{
-		Comparable[] mergedList = new Comparable[list1.length+list2.length];
+ 		Comparable[] mergedList = new Comparable[list1.length+list2.length];
  		
  		int listIndex = 0;
  		int i = 0;
  		int x = 0;
  		
-// 		Comparable check1 = list1[i];
-// 		Comparable check2 = list2[x];
+// 		String check1 = list1[i];
+// 		String check2 = list2[x];
  		
- 		while(i < list1.length && x < list2.length)
+		while(i < list1.length || x < list2.length)
  		{
  			//System.out.println("i: " + i + " x: " + x + " listIndex: " + listIndex + " check1: " + check1 + " check2: " + check2);
- 			
- 			if (list1[i].compareTo(list2[x]) <= 0)
+	 		
+	 		if (i == list1.length)
+	 		{
+	 			mergedList[listIndex] = list2[x];
+	 			x++;
+	 			listIndex++;
+	 		}
+	 		else if(x == list2.length)
+	 		{
+	 			mergedList[listIndex] = list1[i];
+	 			i++;
+	 			listIndex++;
+	 		}
+	 		else if (list1[i].compareTo(list2[x]) < 0)
  			{
  				//check1 is closer to a than check2
  				mergedList[listIndex] = list1[i];
- 				listIndex++;
  				i++;
+ 				listIndex++;
  			}
  			else
  			{
  				//check2 is closer to a than check1
  				mergedList[listIndex] = list2[x];
- 				listIndex++;
  				x++;
+ 				listIndex++;
  			}
  		}
- 		
- 		while (i < list1.length)
- 		{
- 			mergedList[listIndex] = list1[i];
- 			i++;
- 			listIndex++;
- 		}
- 		
- 		while (x < list2.length)
- 		{
- 			mergedList[listIndex] = list2[x];
- 			x++;
- 			listIndex++;
- 		}
- 		
- 		return mergedList;
+ 	 	return mergedList;
  	}
 	
-	public static Comparable[] mergeSort2(Comparable[] arr)
+	public static Comparable[] mergeSortC(Comparable[] arr)
  	{
 		if (arr.length == 1)
 		{
@@ -421,10 +481,10 @@ public class Team2SortCompetition extends SortCompetition{
 		}
 		else
 		{
-	 		Comparable[] list1 = Arrays.copyOfRange(arr, 0, arr.length/2);
-	 		Comparable[] list2 = Arrays.copyOfRange(arr, arr.length/2, arr.length);
+			Comparable[] list1 = Arrays.copyOfRange(arr, 0, arr.length/2);
+			Comparable[] list2 = Arrays.copyOfRange(arr, arr.length/2, arr.length);
 	 		
-	 		return merge2(mergeSort2(list1), mergeSort2(list2));		
+	 		return mergeC(mergeSortC(list1), mergeSortC(list2));		
 		}	
  	}
 }
